@@ -1,0 +1,119 @@
+.select-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+    gap: 5px;
+    background-color: #e5e5e5;
+    border-radius: 8px;
+}
+
+.download-btn {
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    width: 100%;
+}
+
+
+
+.button-link {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: lato, arial, sans-serif;
+    font-size: 16px;
+    border: 1px solid #6c11c9;
+    border-radius: 4px;
+    background-color: #6c11c9;
+    color: #fff;
+    padding: 9px 23px;
+    width: 100%;
+    text-align: center;
+}
+
+.button-link-disabled {
+    background-color: grey;
+    border: 1px solid grey;
+}
+
+.custom-dropdown-close {
+    display: none;
+}
+
+.custom-dropdown-open {
+    display: block;
+    position: absolute;
+    background-color: #fff;
+    margin-top: 5px;
+    z-index: 10;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 998;
+}
+
+.dropdown-label {
+    margin: 0;
+    border: 1px solid #d1cfd7;
+    background-color: #fff;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: lato, arial, sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    padding: 8px 16px;
+    width: 100%;
+}
+
+.custom-dropdown {
+    position: absolute;
+    background-color: #e5e5e5;
+    margin-top: 5px;
+    z-index: 10;
+}
+
+.option {
+    border: 1px solid #d1cfd7;
+    border-radius: 4px;
+    background-color: #6c11c9;
+    color: #ffffff;
+    font-family: Arial;
+    padding: 3px 16px;
+    cursor: pointer;
+    //margin: 2px 0;
+}
+
+.getSupplyOrders_loader {
+    z-index: 2;
+    left: 7px;
+    top: 7px;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    border: 2px dashed red;
+    animation-name: getSupplyOrders_loader-fetching;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    //animation-timing-function: linear;
+}
+
+@keyframes getSupplyOrders_loader-fetching {
+    0% {
+        transform: rotate(0deg) scale(0);
+    }
+
+    100% {
+        transform: rotate(360deg) scale(1.5);
+    }
+}

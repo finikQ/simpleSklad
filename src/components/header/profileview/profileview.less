@@ -1,0 +1,69 @@
+
+.header_profile_dropdown {
+  display: none;
+  z-index: 10;
+  box-sizing: border-box;
+  padding-top: 4px;
+  position: absolute;
+  right: 0;
+  top: 47px;
+}
+
+.header_profile_dropdown:hover {
+  display: block;
+}
+
+.header_profile {
+  font-family: "lato", arial, sans-serif;
+  font-size: 18px;
+  line-height: 20px;
+  text-decoration: none;
+  display: block;
+  padding: 7px 20px;
+  border-radius: 8px;
+  border: solid rgba(58, 0, 120, 0.15);
+}
+
+.header_profile:hover+.header_profile_dropdown {
+  display: block;
+}
+
+.ProfileDropdown {
+  background-color: #fff;
+  border: 1px solid #d1cfd7;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .1);
+  box-sizing: border-box;
+  max-height: 640px;
+  width: 320px;
+}
+
+.DropdownHeader {
+  align-items: center;
+  background: #f0f0f3;
+  border-bottom: 1px solid #d1cfd7;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+}
+
+.DropdownHeader span {
+  font-family: "lato", arial, sans-serif;
+  font-size: 18px;
+}
+
+.ProfileDropdown_content {
+  padding: 8px;
+  position: relative;
+}
+
+.ProfileDropdown_api-key form {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.ProfileDropdown_api-key form input {
+  width: 100%;
+}

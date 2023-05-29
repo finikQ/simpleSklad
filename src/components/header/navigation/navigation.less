@@ -1,0 +1,90 @@
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 60px;
+  padding: 0px 10px;
+  margin: 0;
+  background-color: white;
+  border: 10px;
+  border-bottom: 1px solid #d1cfd7;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border-radius: 8px;
+}
+
+nav ul li:hover>ul {
+  display: block;
+}
+
+nav ul ul {
+  display: none;
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0px;
+  padding: 0;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+nav ul ul li {
+  display: block;
+  width: 230px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .1);
+}
+
+nav ul ul li:hover {
+  background-color: rgba(58, 0, 120, .15);
+}
+
+a {
+  font-family: "lato", arial, sans-serif;
+  font-size: 18px;
+  line-height: 20px;
+  text-decoration: none;
+  color: #333;
+}
+
+nav ul li>a {
+  display: block;
+  padding: 7px 20px;
+}
+
+.parent-menu {
+  display: flex;
+  align-items: center;
+  height: 60px;
+}
+
+.parent-menu>li {
+  margin-left: 10px;
+  border: solid rgba(58, 0, 120, .15);
+}
+
+.parent-menu>li:hover {
+  background-color: rgba(58, 0, 120, .15);
+  border: solid rgba(58, 0, 120, .15);
+}
+
+.div-logo {
+  display: flex;
+  align-items: center;
+  outline: none;
+}
+
+.logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 50px;
+}
