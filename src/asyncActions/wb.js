@@ -62,7 +62,7 @@ export const uploadUpdateWbFbsSortList = (selectedFile) => {
 
       const response = await axios({
         method: "post",
-        url: "http://127.0.0.1:3003/api/wb/supplies/stickers",
+        url: "http://127.0.0.1:3003/api/wb/fbs/editlist",
         data: formData,
         responseType: "blob",
       });
