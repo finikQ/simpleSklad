@@ -4,7 +4,11 @@ const SET_FBS_STICKERS_LIST = "SET_FBS_STICKERS_LIST";
 const SET_SUPPLYODERS_IS_FETCHING = "SET_SUPPLYODERS_IS_FETCHING";
 
 const defaultState = {
-  supplies: [],
+  supplies: [{
+    id: 0,
+    supplies_id: "id поставки",
+    supplies_name: "Название поставки"
+  }],
   getSupplyOrders_isFetching: false,
   countCheck: 0,
   haha: "",
