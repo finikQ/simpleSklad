@@ -48,16 +48,25 @@ export async function getWbSuppliesList(db) {
       .join(',');
 
     if (deleteSupplies.length > 0) {
-      const sql = `
-        DELETE FROM wbfbsorders WHERE supplies_id IN (${deleteSupplies});
-        DELETE FROM wbfbssupplies WHERE supplies_id IN (${deleteSupplies});
+      const sqlDelOrders = `
+      DELETE FROM wbfbsorders WHERE supplies_id IN (${deleteSupplies});
       `;
-
-      db.run(sql, function (err) {
+      db.run(sqlDelOrders, function (err) {
         if (err) {
           console.error(err.message);
         } else {
-          console.log(`Удалено ${this.changes} заказов + поставок: ${deleteSupplies}`);
+          console.log(`Удалено ${this.changes} поставок: ${deleteSupplies}`);
+        }
+      });
+
+      const sqlDelSupplies = `
+      DELETE FROM wbfbssupplies WHERE supplies_id IN (${deleteSupplies});
+      `;
+      db.run(sqlDelSupplies, function (err) {
+        if (err) {
+          console.error(err.message);
+        } else {
+          console.log(`Удалено ${this.changes} заказов: ${deleteSupplies}`);
         }
       });
     }
