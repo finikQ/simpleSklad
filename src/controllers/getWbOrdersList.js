@@ -8,8 +8,6 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const pdf = new jsPDF('l', 'mm', [58, 40]);
-
 async function generateStickersArray(req, db) {
   try {
     function getSupplies() {
@@ -154,6 +152,7 @@ async function createExcelFile(sortedOrders, supply) {
 
 async function createPdfDocument(sortedOrders, supply) {
   try {
+    const pdf = new jsPDF('l', 'mm', [58, 40]);
     for (const item of sortedOrders) {
       pdf.addPage();
       pdf.addImage(item.file, 'PNG', 0, 0, 58, 40);
