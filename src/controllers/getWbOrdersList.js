@@ -96,7 +96,7 @@ async function sortOrders(req, db) {
       });
       if (matchInfo) {
         return {
-          article: order.item_article,
+          article: matchInfo.article,
           name: matchInfo.name,
           barcode: order.item_barcode,
           id: order.id,
@@ -113,8 +113,8 @@ async function sortOrders(req, db) {
           id: order.id,
           file: order.sticker,
           value: 'Необходимо обновить "Сортировочный Лист", добавить этот товар',
-          partA: toString(order.sticker_partA),
-          partB: toString(order.sticker_partB)
+          partA: order.sticker_partA,
+          partB: order.sticker_partB
         };
       }
 
@@ -129,11 +129,13 @@ async function sortOrders(req, db) {
 async function createExcelFile(sortedOrders, supply) {
   try {
     let excelOrders = sortedOrders.map(item => {
+      let partB = item.partB.toString();
+      if (partB.length < 4) { partB = '0'.repeat(4 - partB.length) + partB }
       return {
         "Артикул": item.article,
         "Название": item.name,
         "С1": item.partA,
-        "С2": item.partB
+        "С2": partB
       }
     })
 
