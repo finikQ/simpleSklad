@@ -118,7 +118,8 @@ async function sortOrders(req, db) {
         };
       }
 
-    }).sort((a, b) => (a.value || 0) - (b.value || 0));
+    }).sort((a, b) => (a.partB) - (b.partB))
+    .sort((a, b) => (a.value || 0) - (b.value || 0));
     return sortedOrders;
   } catch (error) {
     console.error("Произошла ошибка: ", error);
