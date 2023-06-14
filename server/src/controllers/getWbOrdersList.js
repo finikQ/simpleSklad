@@ -4,9 +4,6 @@ import AdmZip from 'adm-zip';
 import { getStickers } from '../utils/getStickers.js';
 import xlsx from 'xlsx';
 import path from "path";
-import { fileURLToPath } from "url";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 async function generateStickersArray(req, db) {
   try {
@@ -22,7 +19,6 @@ async function generateStickersArray(req, db) {
       });
     }
     let supplies = await getSupplies()
-
     let orderIdList = supplies.map((item) => item.order_id);
 
     // Получение списка наклеек для каждого заказа
@@ -64,7 +60,6 @@ async function generateStickersArray(req, db) {
         console.log(`Обновлено ${this.changes} строк`);
       }
     });
-
     return { arr_stickersList }
   } catch (error) {
     console.error("Произошла ошибка: ", error);
@@ -85,9 +80,6 @@ async function sortOrders(req, db) {
         });
       });
     }
-
-
-    // Соединение массивов по общему полю
     let arr_OrdersInfo = await getSupplies();
     let arr_itemsInfo = JSON.parse(await fs.readFile("./dist/wbfbssort.json"));
     let sortedOrders = arr_OrdersInfo.map((order) => {
@@ -117,7 +109,6 @@ async function sortOrders(req, db) {
           partB: order.sticker_partB
         };
       }
-
     }).sort((a, b) => (a.partB) - (b.partB))
     .sort((a, b) => (a.value || 0) - (b.value || 0));
     return sortedOrders;
@@ -139,18 +130,16 @@ async function createExcelFile(sortedOrders, supply) {
         "С2": partB
       }
     })
-
     let workbook = xlsx.utils.book_new()
     let excelSheet = xlsx.utils.json_to_sheet(excelOrders)
     xlsx.utils.book_append_sheet(workbook, excelSheet, "1")
     xlsx.writeFileSync(workbook, `./dist/${supply}_ЛистСборки.xlsx`)
-    const excelFilePath = path.join(__dirname, `./../../dist/${supply}_ЛистСборки.xlsx`);
+    const excelFilePath = path.join(path.resolve(), `/dist/${supply}_ЛистСборки.xlsx`);
     return excelFilePath;
   } catch (error) {
     console.error("Произошла ошибка: ", error);
     throw error
   }
-
 }
 
 async function createPdfDocument(sortedOrders, supply) {
@@ -161,9 +150,8 @@ async function createPdfDocument(sortedOrders, supply) {
       pdf.addImage(item.file, 'PNG', 0, 0, 58, 40);
     }
     pdf.deletePage(1);
-    const pdfFilePath = path.join(__dirname, `/../../dist/${supply}_Этикеткки.pdf`);
+    const pdfFilePath = path.join(path.resolve(), `/dist/${supply}_Этикетки.pdf`);
     await fs.writeFile(pdfFilePath, pdf.output(), 'binary');
-
     return pdfFilePath;
   } catch (error) {
     console.error("Произошла ошибка: ", error);
@@ -183,12 +171,10 @@ export async function getWbOrdersList(req, db) {
       createPdfDocument(sortedOrders, req.supplies),
       createExcelFile(sortedOrders, req.supplies),
     ]);
-    let zipFilePath = path.join(__dirname, `/../../dist/${req.supplies}.zip`)
-
+    const zipFilePath = path.join(path.resolve(), `/dist/${req.supplies}.zip`)
     const zip = new AdmZip();
     zip.addLocalFile(pdfFilePath);
     zip.addLocalFile(excelFilePath);
-    
     zip.writeZip(zipFilePath);
 
     return zipFilePath
