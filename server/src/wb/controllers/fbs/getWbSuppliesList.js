@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getToken } from "../utils/getToken.js";
+import { getToken } from "../../utils/getToken.js";
 
 export async function getWbSuppliesList(db) {
   try {
@@ -15,7 +15,6 @@ export async function getWbSuppliesList(db) {
         });
       });
     }
-
     let firstArray = await getSupplies();
 
     // Получение списка поставок
@@ -78,7 +77,6 @@ export async function getWbSuppliesList(db) {
       const sqlSupplies = `
       INSERT INTO wbfbssupplies (supplies_id, supplies_name) VALUES ${createSuppliesSql};
       `;
-
       db.run(sqlSupplies, function (err) {
         if (err) {
           console.error(err.message);
@@ -114,7 +112,6 @@ export async function getWbSuppliesList(db) {
       const sqlOrders = `
       INSERT INTO wbfbsorders (supplies_id, order_id, item_article, item_barcode) VALUES ${resu};
       `;
-
       db.run(sqlOrders, function (err) {
         if (err) {
           console.error(err.message);
@@ -123,10 +120,8 @@ export async function getWbSuppliesList(db) {
         }
       });
     }
-
-    let resulttt = await getSupplies()
-    return resulttt;
-
+    let result = await getSupplies()
+    return result;
   } catch (error) {
     console.error(error);
   }

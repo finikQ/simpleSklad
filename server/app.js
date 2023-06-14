@@ -1,14 +1,9 @@
 import express from "express";
 import cors from "cors";
-import multer from "multer";
 import config from "./src/config.js";
 import sqlite3 from 'sqlite3';
-
-import { getWbSuppliesList } from "./src/controllers/getWbSuppliesList.js";
-import { getWbFbsList } from "./src/controllers/getWbFbsList.js";
-import { getWbOrdersList } from "./src/controllers/getWbOrdersList.js";
-import { updateWbFbsList } from "./src/controllers/updateWbFbsList.js";
-import { setWbApiKey } from "./src/controllers/setWbApiKey.js";
+import { wbRoutes } from "./src/wb/routes.js";
+//import fbsRoute from './src/wb/routes/fbs.route.js'
 
 const db = new sqlite3.Database('./my-database.db', (err) => {
   if (err) {
@@ -45,7 +40,6 @@ db.serialize(() => {
 });
 
 const app = express();
-const upload = multer();
 const host = config.host;
 const port = config.port;
 
@@ -61,32 +55,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static files
+// app.use(express.static('public'));
 
 // Routes
-app.get("/api/wb/supplies", async (req, res) => {
-  const respo = await getWbSuppliesList(db);
-  return res.send(respo);
-});
+//app.use('/api', fbsRoute)
+wbRoutes(app, db)
 
-app.post("/api/wb/supplies/stickers", async (req, res) => {
-  const respo = await getWbOrdersList(req.body, db);
-  res.sendFile(respo);
-});
-
-app.get('/api/wb/fbs/editlist', upload.single('file'), async (req, res) => {
-  const respo = await getWbFbsList();
-  res.sendFile(respo);
-});
-
-app.post('/api/wb/fbs/editlist', upload.single('file'), async (req, res) => {
-  const respo = await updateWbFbsList(req);
-  res.send(respo);
-});
-
-app.post('/config/api-key', async (req, res) => {
-  const respo = await setWbApiKey(req, db);
-  res.send(respo);
-});
 
 // Закрыть подключения к sqlite3
 process.on('exit', () => {

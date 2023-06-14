@@ -5,7 +5,7 @@ import path from "path";
 export async function getWbFbsList() {
     try {
         // Чтение данных из файла
-        let data = await fs.readFile("./dist/wbfbssort.json");
+        let data = await fs.readFile("./server/dist/wbfbssort.json");
         let excelOrders = JSON.parse(data);
 
         // Создание файла Excel

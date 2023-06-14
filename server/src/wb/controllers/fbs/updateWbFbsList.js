@@ -24,7 +24,7 @@ export async function updateWbFbsList(req) {
     }
 
     // Обновить список сортировки
-    await fs.writeFile("./dist/wbfbssort.json", JSON.stringify(data));
+    await fs.writeFile("./server/dist/wbfbssort.json", JSON.stringify(data));
     console.log("Данные успешно записаны");
   
     return data;

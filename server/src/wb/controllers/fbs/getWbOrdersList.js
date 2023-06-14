@@ -1,9 +1,8 @@
 import * as fs from "fs/promises";
 import { jsPDF } from 'jspdf';
 import AdmZip from 'adm-zip';
-import { getStickers } from '../utils/getStickers.js';
+import { getStickers } from '../../utils/getStickers.js';
 import xlsx from 'xlsx';
-import path from "path";
 
 async function generateStickersArray(req, db) {
   try {
@@ -81,7 +80,7 @@ async function sortOrders(req, db) {
       });
     }
     let arr_OrdersInfo = await getSupplies();
-    let arr_itemsInfo = JSON.parse(await fs.readFile("./dist/wbfbssort.json"));
+    let arr_itemsInfo = JSON.parse(await fs.readFile("./server/dist/wbfbssort.json"));
     let sortedOrders = arr_OrdersInfo.map((order) => {
       let matchInfo = arr_itemsInfo.find((item) => {
         return item.barcode == Number(order.item_barcode)
@@ -133,9 +132,8 @@ async function createExcelFile(sortedOrders, supply) {
     let workbook = xlsx.utils.book_new()
     let excelSheet = xlsx.utils.json_to_sheet(excelOrders)
     xlsx.utils.book_append_sheet(workbook, excelSheet, "1")
-    xlsx.writeFileSync(workbook, `./dist/${supply}_ЛистСборки.xlsx`)
-    const excelFilePath = path.join(path.resolve(), `/dist/${supply}_ЛистСборки.xlsx`);
-    return excelFilePath;
+    const excelData = xlsx.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+    return excelData;
   } catch (error) {
     console.error("Произошла ошибка: ", error);
     throw error
@@ -150,9 +148,8 @@ async function createPdfDocument(sortedOrders, supply) {
       pdf.addImage(item.file, 'PNG', 0, 0, 58, 40);
     }
     pdf.deletePage(1);
-    const pdfFilePath = path.join(path.resolve(), `/dist/${supply}_Этикетки.pdf`);
-    await fs.writeFile(pdfFilePath, pdf.output(), 'binary');
-    return pdfFilePath;
+    const pdfData = pdf.output();
+    return pdfData;
   } catch (error) {
     console.error("Произошла ошибка: ", error);
     throw error
@@ -167,17 +164,15 @@ export async function getWbOrdersList(req, db) {
     const sortedOrders = await sortOrders(req, db);
     console.log('Формирование Excel и PDF файлов');
 
-    const [pdfFilePath, excelFilePath] = await Promise.all([
+    const [pdfData, excelData] = await Promise.all([
       createPdfDocument(sortedOrders, req.supplies),
       createExcelFile(sortedOrders, req.supplies),
     ]);
-    const zipFilePath = path.join(path.resolve(), `/dist/${req.supplies}.zip`)
     const zip = new AdmZip();
-    zip.addLocalFile(pdfFilePath);
-    zip.addLocalFile(excelFilePath);
-    zip.writeZip(zipFilePath);
-
-    return zipFilePath
+    zip.addFile(`${req.supplies}_Этикетки.pdf`, pdfData);
+    zip.addFile(`${req.supplies}_СборочныйЛист.xlsx`, excelData);
+    const zipData = zip.toBuffer();
+    return zipData
   } catch (error) {
     console.error("Произошла ошибка: ", error);
     throw error;
