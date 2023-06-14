@@ -1,5 +1,4 @@
 import axios from "axios";
-import config from "../configDev.js";
 import { getToken } from "../utils/getToken.js";
 
 export async function getWbSuppliesList(db) {

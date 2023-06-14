@@ -1,9 +1,0 @@
-/node_modules
-<<<<<<< HEAD
-/dist
-config.js
-=======
-/src/configDev.js
-/dist
-*.db
->>>>>>> 78b14f23d45c73575718fba597e80090dbbecd94
