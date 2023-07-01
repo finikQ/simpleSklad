@@ -2,3 +2,6 @@
 */dist
 *.db
 */package-lock.json
+server/public
+server/build
+server/lib

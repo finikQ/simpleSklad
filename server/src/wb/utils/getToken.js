@@ -12,7 +12,7 @@ export async function getToken(db) {
       });
     }
 
-    let token = await getApiKey(db)
+    let token = await getApiKey(db);
     return token[0].api_key;
   } catch (error) {
     console.error("Произошла ошибка: ", error);

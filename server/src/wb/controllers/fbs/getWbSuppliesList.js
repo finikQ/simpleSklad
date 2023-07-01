@@ -3,7 +3,7 @@ import { getToken } from "../../utils/getToken.js";
 
 export async function getWbSuppliesList(db) {
   try {
-    let api_token = await getToken(db)
+    let api_token = await getToken(db);
     async function getSupplies() {
       return new Promise((resolve, reject) => {
         db.all("SELECT * FROM wbfbssupplies", function (err, rows) {
@@ -17,7 +17,6 @@ export async function getWbSuppliesList(db) {
     }
     let firstArray = await getSupplies();
 
-    // Получение списка поставок
     const getSuppliesList = await axios
       .get("https://suppliers-api.wildberries.ru/api/v3/supplies", {
         headers: {
@@ -30,7 +29,7 @@ export async function getWbSuppliesList(db) {
       })
       .then(function (response) {
         let supplies = response.data.supplies.slice(-10);
-        return supplies
+        return supplies;
       })
       .catch(function (error) {
         console.log(error);
@@ -42,8 +41,8 @@ export async function getWbSuppliesList(db) {
     // Удаление лишних
     const deleteSupplies = sqliteSuppliesList
       .filter((id) => !wbFbsSuppliesList.includes(id))
-      .map(id => `"${id}"`)
-      .join(',');
+      .map((id) => `"${id}"`)
+      .join(",");
 
     if (deleteSupplies.length > 0) {
       const sqlDelOrders = `
@@ -70,8 +69,15 @@ export async function getWbSuppliesList(db) {
     }
 
     // Добавление новых
-    const createSupplies = wbFbsSuppliesList.filter((id) => !sqliteSuppliesList.includes(id))
-    const createSuppliesSql = createSupplies.map(id => `('${id}', '${getSuppliesList.find(item => item.id === id).name}')`).join(',');
+    const createSupplies = wbFbsSuppliesList.filter(
+      (id) => !sqliteSuppliesList.includes(id)
+    );
+    const createSuppliesSql = createSupplies
+      .map(
+        (id) =>
+          `('${id}', '${getSuppliesList.find((item) => item.id === id).name}')`
+      )
+      .join(",");
 
     if (createSupplies.length > 0) {
       const sqlSupplies = `
@@ -86,26 +92,28 @@ export async function getWbSuppliesList(db) {
       });
 
       let newSuppliesSql = createSupplies.map(async (supply) => {
-        const response = await axios
-          .get(`https://suppliers-api.wildberries.ru/api/v3/supplies/${supply}/orders`,
-            {
-              headers: { Authorization: api_token, },
-            }
-          )
+        const response = await axios.get(
+          `https://suppliers-api.wildberries.ru/api/v3/supplies/${supply}/orders`,
+          {
+            headers: { Authorization: api_token },
+          }
+        );
         console.log(response.data.orders.length);
-        let result = response.data.orders.map(item => ({
+        let result = response.data.orders.map((item) => ({
           supply,
           item_id: item.id,
           item_article: item.article,
-          item_barcode: item.skus[0]
-        }))
+          item_barcode: item.skus[0],
+        }));
         return result;
-      })
+      });
 
       const suppliesOrderLists = await Promise.all(newSuppliesSql);
 
       const resu = [].concat(...suppliesOrderLists).map((data) => {
-        const values = Object.values(data).map((value) => (typeof value === 'string' ? `'${value}'` : value)).join(', ');
+        const values = Object.values(data)
+          .map((value) => (typeof value === "string" ? `'${value}'` : value))
+          .join(", ");
         return `(${values})`;
       });
 
@@ -120,7 +128,7 @@ export async function getWbSuppliesList(db) {
         }
       });
     }
-    let result = await getSupplies()
+    let result = await getSupplies();
     return result;
   } catch (error) {
     console.error(error);

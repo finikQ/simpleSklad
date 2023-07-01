@@ -10,22 +10,22 @@ export function wbRoutes(app, db) {
   app.get("/api/wb/supplies", async (req, res) => {
     const respo = await getWbSuppliesList(db);
     return res.send(respo);
-  }); 
+  });
 
   app.post("/api/wb/supplies/stickers", async (req, res) => {
     const respo = await getWbOrdersList(req.body, db);
-    res.attachment('archive.zip');
+    res.attachment("archive.zip");
     res.send(respo);
-    //res.sendFile(respo);
   });
 
   app.get("/api/wb/fbs/editlist", upload.single("file"), async (req, res) => {
-    const respo = await getWbFbsList();
-    res.sendFile(respo);
+    const respo = await getWbFbsList(db);
+    res.attachment("ЛистСборки.xlsx");
+    res.send(respo);
   });
 
   app.post("/api/wb/fbs/editlist", upload.single("file"), async (req, res) => {
-    const respo = await updateWbFbsList(req);
+    const respo = await updateWbFbsList(req, db);
     res.send(respo);
   });
 

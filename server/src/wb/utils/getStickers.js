@@ -3,7 +3,7 @@ import { getToken } from "./getToken.js";
 
 export async function getStickers(orders, db) {
   try {
-    let api_token = await getToken(db)
+    let api_token = await getToken(db);
     let result = { stickers: [] };
     const requests = [];
     while (orders.length > 0) {

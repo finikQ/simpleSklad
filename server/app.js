@@ -1,15 +1,15 @@
 import express from "express";
 import cors from "cors";
 import config from "./src/config.js";
-import sqlite3 from 'sqlite3';
+import sqlite3 from "sqlite3";
 import { wbRoutes } from "./src/wb/routes.js";
 //import fbsRoute from './src/wb/routes/fbs.route.js'
 
-const db = new sqlite3.Database('./my-database.db', (err) => {
+const db = new sqlite3.Database("./my-database.db", (err) => {
   if (err) {
     console.error(err.message);
   }
-  console.log('Connected to sqlite3');
+  console.log("Connected to sqlite3");
 });
 
 db.serialize(() => {
@@ -36,7 +36,15 @@ db.serialize(() => {
       sticker_partB INTEGER,
       sticker_barcode TEXT
     );
-  `)
+
+    CREATE TABLE IF NOT EXISTS wbitems(
+      id INTEGER PRIMARY KEY,
+      article TEXT,
+      name TEXT,
+      barcode INTEGER UNIQUE,
+      sortValue INTEGER
+    );
+  `);
 });
 
 const app = express();
@@ -56,20 +64,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files
-// app.use(express.static('public'));
+app.use(express.static("public"));
 
 // Routes
 //app.use('/api', fbsRoute)
-wbRoutes(app, db)
-
+wbRoutes(app, db);
 
 // Закрыть подключения к sqlite3
-process.on('exit', () => {
+process.on("exit", () => {
   db.close((err) => {
     if (err) {
-      console.error('Ошибка закрытия подключения к базе данных:', err.message);
+      console.error("Ошибка закрытия подключения к базе данных:", err.message);
     } else {
-      console.log('Подключение к базе данных успешно закрыто');
+      console.log("Подключение к базе данных успешно закрыто");
     }
   });
 });

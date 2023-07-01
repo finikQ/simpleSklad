@@ -8,6 +8,6 @@ export async function setWbApiKey(req, db) {
     console.log("API key успешно сохранен");
   } catch (error) {
     console.error("Произошла ошибка: ", error);
-    throw error
+    throw error;
   }
 }

@@ -6,6 +6,13 @@
   "scripts": {
     "start_front": "cd client && npx vite",
     "start_back": "node server/app.js",
+    "build_front": "cd client && npx vite build",
+    "prebuild_folder": "cd server && if exist lib rd /s /q lib && mkdir lib",
+    "prebuild_backend": "cd server && npx babel app.js -d lib && npx babel src -d lib/src",
+    "prebuild_copy": "cd server && xcopy /E /I /Y public build\\public && xcopy /E /I /Y dist build\\dist && xcopy /E /I /Y node_modules lib\\node_modules",
+    "build_folder": "cd server && if exist build rd /s /q build && mkdir build",
+    "prebuild_package": "cd server && pkg lib/app.js --target node16-win-x64 -o build/simpleSklad.exe",
+    "build": "npm run build_front && npm run prebuild_folder && npm run build_folder && npm run prebuild_copy && npm run prebuild_backend && npm run prebuild_package",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
